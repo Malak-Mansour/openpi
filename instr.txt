@@ -1,3 +1,11 @@
+When u run again:
+    cd openpi
+    source .venv/bin/activate
+    export HF_LEROBOT_HOME="/home/malak.mansour/lerobot"
+    uv run examples/libero/convert_do_rlds_to_lerobot.py --data_dir /home/malak.mansour/tensorflow_datasets
+
+
+Initial installation:
 in ICL folder:
     git clone https://github.com/Physical-Intelligence/openpi.git
     git clone https://github.com/huggingface/lerobot.git
@@ -22,5 +30,9 @@ in convert_.py:
     uv pip install tensorflow_datasets
     uv pip install tensorflow
 
-export HF_LEROBOT_HOME="/home/malak.mansour/lerobot"
+export HF_LEROBOT_HOME="/home/malak.mansour/lerobot_from_rlds"
 uv run examples/libero/convert_do_rlds_to_lerobot.py --data_dir /home/malak.mansour/tensorflow_datasets
+
+
+export HF_LEROBOT_HOME="/home/malak.mansour/lerobot_from_hdf5"
+uv run examples/aloha_real/convert_do_hdf5_to_lerobot.py --raw_dir /home/malak.mansour/recorded_data_hdf5 --repo_id Malak-Mansour/DO_manual_lerobot

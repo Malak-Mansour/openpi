@@ -6,11 +6,11 @@ modified for any other data you have saved in a custom format.
 
 Usage:
 uv run examples/libero/convert_libero_data_to_lerobot.py --data_dir /path/to/your/data
-uv run examples/libero/convert_do_data_to_lerobot.py --data_dir /home/malak.mansour/tensorflow_datasets/do_manual
+uv run examples/libero/convert_do_rlds_to_lerobot.py --data_dir /home/malak.mansour/tensorflow_datasets
 
 If you want to push your dataset to the Hugging Face Hub, you can use the following command:
 uv run examples/libero/convert_libero_data_to_lerobot.py --data_dir /path/to/your/data --push_to_hub
-uv run examples/libero/convert_do_data_to_lerobot.py --data_dir ~/do_manual --push_to_hub
+uv run examples/libero/convert_do_rlds_to_lerobot.py --data_dir /home/malak.mansour/tensorflow_datasets --push_to_hub
 
 Note: to run the script, you need to install tensorflow_datasets:
 `uv pip install tensorflow tensorflow_datasets`
@@ -21,20 +21,12 @@ Running this conversion script will take approximately 30 minutes.
 """
 
 
-"""
-Minimal example script for converting a custom RLDS dataset (do_manual) to LeRobot format.
-
-Usage:
-uv run examples/libero/convert_do_rlds_to_lerobot.py --data_dir /home/malak.mansour/tensorflow_datasets
-"""
 import shutil
 
 # from lerobot.common.datasets.lerobot_dataset import LEROBOT_HOME
 from lerobot.common.datasets.lerobot_dataset import HF_LEROBOT_HOME
 LEROBOT_HOME=HF_LEROBOT_HOME
 from lerobot.common.datasets.lerobot_dataset import LeRobotDataset
-# from lerobot.lerobot.common.datasets.lerobot_dataset import LEROBOT_HOME
-# from lerobot.lerobot.common.datasets.lerobot_dataset import LeRobotDataset
 import tensorflow_datasets as tfds
 import tyro
 # import rlds
@@ -77,29 +69,6 @@ def main(data_dir: str, *, push_to_hub: bool = False):
     raw_dataset = tfds.load("do_manual", data_dir=data_dir, split="train")
 
 
-    # Load your custom RLDS dataset
-    # from DO_manual_rlds_builder.do_manual.do_manual_dataset_builder import DoManual  # <-- Adjust path if needed
-    # builder = DoManual(data_dir=data_dir)
-    # builder.download_and_prepare()
-    # raw_dataset = builder.as_dataset(split="train")
-    
-    # raw_dataset = rlds.load_dataset(data_dir, split="train")
-
-
-
-    # for episode in raw_dataset:
-    #     language_instruction = episode["steps"][0]["language_instruction"].numpy().decode() \
-    #         if "language_instruction" in episode["steps"][0] else "do_manual"
-    #     for step in episode["steps"].as_numpy_iterator():
-    #         dataset.add_frame(
-    #             {
-    #                 "image": step["observation"]["image"],
-    #                 "state": step["observation"]["state"],
-    #                 "actions": step["action"],
-    #             }
-    #         )
-    #     dataset.save_episode(task=language_instruction)
-
     for episode in raw_dataset:
         steps = list(episode["steps"].as_numpy_iterator())
         # language_instruction = (
@@ -107,6 +76,8 @@ def main(data_dir: str, *, push_to_hub: bool = False):
         #     if "language_instruction" in steps[0] 
         #     else "do_manual"
         # )
+        language_instruction = steps[0]["language_instruction"].decode() 
+        
 
         for step in steps:
             dataset.add_frame(
@@ -114,13 +85,14 @@ def main(data_dir: str, *, push_to_hub: bool = False):
                     "image": step["observation"]["image"],
                     "state": step["observation"]["state"],
                     "actions": step["action"],
-                    "task": step["language_instruction"].decode(),
+                    "task": language_instruction,  # Use the first step's language instruction
+                    # "task": step["language_instruction"].decode(),
                 }
             )
 
         # dataset.save_episode(task=language_instruction)  
-        dataset.save_episode()  
         # dataset.save_episode(task=step["language_instruction"].decode())
+        dataset.save_episode()  
 
 
     # Consolidate the dataset, skip computing stats since we will do that later
