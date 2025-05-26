@@ -6,6 +6,7 @@ modified for any other data you have saved in a custom format.
 
 Usage:
 uv run examples/libero/convert_libero_data_to_lerobot.py --data_dir /path/to/your/data
+uv run examples/libero/convert_libero_data_to_lerobot.py --data_dir /l/users/malak.mansour/Datasets/libero/lerobot
 
 If you want to push your dataset to the Hugging Face Hub, you can use the following command:
 uv run examples/libero/convert_libero_data_to_lerobot.py --data_dir /path/to/your/data --push_to_hub
