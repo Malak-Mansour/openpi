@@ -1,0 +1,26 @@
+in ICL folder:
+    git clone https://github.com/Physical-Intelligence/openpi.git
+    git clone https://github.com/huggingface/lerobot.git
+
+cd openpi
+git submodule update --init --recursive
+
+(av and pyav) do this change: https://github.com/Physical-Intelligence/openpi/issues/472#issuecomment-2867904337 
+
+source .venv/bin/activate
+GIT_LFS_SKIP_SMUDGE=1 uv sync
+GIT_LFS_SKIP_SMUDGE=1 uv pip install -e .
+
+
+in convert_.py: 
+    (LEROBOT_HOME not found) add: LEROBOT_HOME=HF_LEROBOT_HOME
+    (recommended in issues) comment out: dataset.consolidate(run_compute_stats=False)
+    (task error) do this change: https://github.com/Physical-Intelligence/openpi/issues/353#issuecomment-2692839340 
+
+
+(No module named): 
+    uv pip install tensorflow_datasets
+    uv pip install tensorflow
+
+export HF_LEROBOT_HOME="/home/malak.mansour/lerobot"
+uv run examples/libero/convert_do_rlds_to_lerobot.py --data_dir /home/malak.mansour/tensorflow_datasets
