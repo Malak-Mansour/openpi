@@ -41,9 +41,18 @@ In convert_.py:
     uv pip install tensorflow_datasets
     uv pip install tensorflow
 
+
+
 export HF_LEROBOT_HOME="/home/malak.mansour/lerobot_from_rlds"
+OR
+export HF_LEROBOT_HOME="/home/malak.mansour/libero_lerobot_from_rlds"
 uv run examples/libero/convert_do_rlds_to_lerobot.py --data_dir /home/malak.mansour/tensorflow_datasets
 
 
+unset HF_LEROBOT_HOME
+
+
 export HF_LEROBOT_HOME="/home/malak.mansour/lerobot_from_hdf5"
+OR
+export HF_LEROBOT_HOME="/home/malak.mansour/libero_lerobot_from_hdf5"
 uv run examples/aloha_real/convert_do_hdf5_to_lerobot.py --raw_dir /home/malak.mansour/recorded_data_hdf5 --repo_id Malak-Mansour/DO_manual_lerobot
