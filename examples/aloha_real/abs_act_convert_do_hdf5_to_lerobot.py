@@ -9,6 +9,7 @@ Converts DO_manual HDF5 demonstrations into LeRobot dataset format.
 Example usage:
 uv run examples/aloha_real/convert_do_hdf5_to_lerobot.py --raw_dir /home/malak.mansour/recorded_data_hdf5 --repo_id Malak-Mansour/DO_manual_lerobot
 """
+
 import h5py
 import numpy as np
 from pathlib import Path
@@ -27,7 +28,7 @@ def convert_hdf5_to_lerobot(raw_dir: Path, repo_id: str, push_to_hub: bool = Fal
         robot_type="panda",
         fps=10,
         features={
-            "image": {
+            "image": { #agentview_rgb
                 "dtype": "image",
                 "shape": (224, 224, 3),
                 "names": ["height", "width", "channel"],
@@ -69,30 +70,28 @@ def convert_hdf5_to_lerobot(raw_dir: Path, repo_id: str, push_to_hub: bool = Fal
                     continue
 
                 group = f[ep_key]
+                actions = group["actions"][:]
                 obs = group["obs"]
                 agentview_rgb = obs["agentview_rgb"][:]
                 eye_in_hand_rgb = obs["eye_in_hand_rgb"][:]
                 ee_states = obs["ee_states"][:]
                 gripper_states = obs["gripper_states"][:]
+                state = np.concatenate([
+                    obs["ee_states"][:],
+                    obs["gripper_states"][:],
+                ], axis=-1)
 
-                states = np.concatenate([ee_states, gripper_states], axis=-1)
+                # Extract language instruction from filename
                 task = os.path.splitext(h5_file.name)[0].replace("_", " ")
 
-                for i in range(len(states)):
-                    state = states[i].astype(np.float32)
-                    if i < len(states) - 1:
-                        next_state = states[i + 1].astype(np.float32)
-                        delta_action = next_state - state
-                    else:
-                        delta_action = np.zeros(7, dtype=np.float32)
-
+                for i in range(len(actions)):
                     dataset.add_frame({
                         "image": agentview_rgb[i],
                         "wrist_image": eye_in_hand_rgb[i],
                         "ee_states": ee_states[i].astype(np.float32),
                         "gripper_states": gripper_states[i].astype(np.float32),
-                        "state": state,
-                        "actions": delta_action,
+                        "state": state[i].astype(np.float32),
+                        "actions": actions[i].astype(np.float32),
                         "task": task,
                     })
 

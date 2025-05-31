@@ -137,6 +137,19 @@ We provide example fine-tuning configs for both, [π₀](src/openpi/training/con
 
 Before we can run training, we need to compute the normalization statistics for the training data. Run the script below with the name of your training config:
 
+
+# MALAK'S ADDITIONAL COMMENTS
+Add ur custom config to /home/malak.mansour/Downloads/ICL/openpi/src/openpi/training/config.py
+
+
+Removed any mention of local_files_only from openpi/src/openpi/training/data_loader.py
+
+
+If the dataset is already downloaded locally:
+
+HF_DATASETS_OFFLINE=1 HF_HOME=/l/users/malak.mansour/Datasets/libero/lerobot uv run scripts/compute_norm_stats.py --config-name pi0_libero_low_mem_finetune
+# END OF HER COMMENTS
+
 ```bash
 uv run scripts/compute_norm_stats.py --config-name pi0_fast_libero
 ```

@@ -1,10 +1,20 @@
 When u run again:
     cd openpi
     source .venv/bin/activate
-    export HF_LEROBOT_HOME="/home/malak.mansour/lerobot"
-    uv run examples/libero/convert_do_rlds_to_lerobot.py --data_dir /home/malak.mansour/tensorflow_datasets
 
+    For converting the dataset:
+        old rlds DO dataset -> lerobot
+        export HF_LEROBOT_HOME="/home/malak.mansour/lerobot"
+        uv run examples/libero/convert_do_rlds_to_lerobot.py --data_dir /home/malak.mansour/tensorflow_datasets
 
+        rlds DO dataset -> lerobot
+        export HF_LEROBOT_HOME="/l/users/malak.mansour/Datasets/do_manual/lerobot_from_rlds"
+        uv run examples/libero/convert_do_rlds_to_lerobot.py --data_dir /l/users/malak.mansour/Datasets/do_manual/rlds
+    
+        hdf5 DO dataset -> lerobot
+        export HF_LEROBOT_HOME="/l/users/malak.mansour/Datasets/do_manual/lerobot_from_hdf5"
+        uv run examples/aloha_real/convert_do_hdf5_to_lerobot.py --raw_dir /l/users/malak.mansour/Datasets/do_manual/hdf5 --repo_id Malak-Mansour/DO_manual_lerobot
+    
 
 
 
@@ -38,8 +48,7 @@ In convert_.py:
 
 
 (No module named): 
-    uv pip install tensorflow_datasets
-    uv pip install tensorflow
+    uv pip install tensorflow_datasets tensorflow
 
 
 
