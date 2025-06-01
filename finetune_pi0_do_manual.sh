@@ -16,9 +16,14 @@ cd ~/Downloads/ICL/openpi
 
 
 # Compute normalization statistics (run once)
-uv run scripts/compute_norm_stats.py --config-name pi0_do_manual --max-frames 300 
+uv run scripts/compute_norm_stats.py --config-name pi0_do_manual_delta --max-frames 300 
+XLA_PYTHON_CLIENT_MEM_FRACTION=0.9 uv run scripts/train.py pi0_do_manual_delta --exp-name=pi0_do_manual_run1 --overwrite
 
-XLA_PYTHON_CLIENT_MEM_FRACTION=0.9 uv run scripts/train.py pi0_do_manual --exp-name=pi0_do_manual_run1 --overwrite
 
+uv run scripts/compute_norm_stats.py --config-name pi0_do_manual_teleop --max-frames 300 
+XLA_PYTHON_CLIENT_MEM_FRACTION=0.9 uv run scripts/train.py pi0_do_manual_teleop --exp-name=pi0_do_manual_run1 --overwrite
+
+uv run scripts/compute_norm_stats.py --config-name pi0_do_manual_next --max-frames 300 
+XLA_PYTHON_CLIENT_MEM_FRACTION=0.9 uv run scripts/train.py pi0_do_manual_next --exp-name=pi0_do_manual_run1 --overwrite
 
 # launch with: sbatch finetune_pi0_do_manual.sh
